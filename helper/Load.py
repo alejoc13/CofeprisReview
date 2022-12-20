@@ -9,7 +9,8 @@ def loadMX():
     coltypes = {'CFN':str,'REGISTRATION NUMBER': str}
     datesCols = ['APPROVAL DATE', 'EXPIRATION DATE']
     FileName = r'Documents/MDT Mexico DB.xlsm'
-    df = pd.read_excel(FileName,sheet_name='ACTIVE CODES',usecols = activeCols,converters=coltypes,parse_dates=datesCols)
+    df = pd.read_excel(FileName,sheet_name = 'ACTIVE CODES',usecols= ['REGISTRATION NUMBER','REGISTRATION NAME','STATUS','EXPIRATION DATE','CFN','CFN DESCRIPTION','OU','MANUFACTURING SITE','LICENSE HOLDER'],converters={'CFN':str,'REGISTRATION NUMBER':str},
+                                date_parser = ['EXPIRATION DATE'])
     print('Base de datos Cargada')
     return df
 

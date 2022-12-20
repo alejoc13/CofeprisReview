@@ -1,7 +1,26 @@
 import pandas as pd 
 import helper.Load as ld
 
+def create_excelSPCOF(doc1,doc2):
+    print('Este documento almacenará la comparación con Submission Plan')
+    name = input('Ingrese el nombre del archivo a guardar:')
+    path = f'Resultados\{name}.xlsx'
+    with pd.ExcelWriter(path) as writer1:
+        doc1.to_excel(writer1, sheet_name = 'Solo en SubPlan', index = False)
+        doc2.to_excel(writer1, sheet_name = 'Solo en COFEPRIS', index = False)
 
+def create_excelSearch(doc1,doc2,doc3,sp):
+    print('Este documento almacenará la comparación con bases de datos')
+    name = input('Ingrese el nombre del archivo a guardar: ')
+    path = f'Resultados\{name}.xlsx'
+    repo = pd.merge(sp,doc2, how='inner',on='REGISTRATION NUMBER')
+    with pd.ExcelWriter(path) as writer1:
+        doc3.to_excel(writer1, sheet_name = 'Con CFNs', index = False)
+        doc2.to_excel(writer1, sheet_name = 'Solo registros', index = False)
+        doc1.to_excel(writer1, sheet_name = 'Sin coincidencias', index = False)
+        repo.to_excel(writer1, sheet_name = 'busqueda en Submission Plan', index = False)
+
+    pass
 
 def TrimCols(row,col = 'REGISTRATION NUMBER'):
     val = str(row[col])
@@ -66,14 +85,14 @@ def searchdiff(cof,sp):
     # Lo que no se encuentra en el doc cofepris pero si está en cofepris SP
     sp_reg = [reg for reg in sp['REGISTRATION NUMBER']]
     findCOF = cof[~cof['REGISTRATION NUMBER'].isin(sp_reg)]
-    return findSP,findCOF
+    create_excelSPCOF(findSP,findCOF)
 
 def comparaDates(mx,cof):
     print('Comparando información...')
-    mx1 = mx.drop(['CFN','CFN DESCRIPTION','TREATED CFN','COUNT'], axis = 1)
+    mx1 = mx.drop(['CFN','CFN DESCRIPTION'], axis = 1)
     mx1 = mx1.drop_duplicates(subset = ['REGISTRATION NUMBER'])
-    Conicidence = pd.DataFrame(columns=mx.columns)
-    noConicidence = pd.DataFrame(columns=mx.columns)
+    Conicidence = pd.DataFrame(columns=mx1.columns)
+    noConicidence = pd.DataFrame(columns=mx1.columns)
     referencias = set([ref for ref in mx1['REGISTRATION NUMBER']])
     cof1 = cof[cof['REGISTRATION NUMBER'].isin(referencias)]
     for rn in referencias:
@@ -88,6 +107,11 @@ def comparaDates(mx,cof):
             else:
                 noConicidence = pd.concat([noConicidence,a])
     return Conicidence,noConicidence
+
+def recoverCFNs(df_ref,mx):
+    ref = set(df_ref['REGISTRATION NUMBER'])
+    mx1 = mx[mx['REGISTRATION NUMBER'].isin(ref)]
+    return mx1
 
 
 
