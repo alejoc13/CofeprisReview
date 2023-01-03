@@ -27,6 +27,8 @@ def load_SPlan():
     df = pd.read_excel('Documents\Submission Plan - Full Report.xlsx',usecols=['Id','RAS Name','Project/Product Name','Status','Submission Type','Expected Submission Date','Approval Date','Therapy Group',
                             'Expected Approval Date','Submission Date','Country','Cluster','License Number','RAC/RAN'])
     df = df.rename(columns={'Project/Product Name':'PRODUCT NAME','License Number':'REGISTRATION NUMBER'})
+    df = df.dropna(subset = ['Submission Type'])
+    df = df[df['Submission Type'].str.contains('Renewal')]
     print('Submission Plan cargado')
     return df
 

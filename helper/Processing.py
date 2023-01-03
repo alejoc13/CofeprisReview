@@ -5,6 +5,7 @@ def create_excelSPCOF(doc1,doc2):
     print('Este documento almacenará la comparación con Submission Plan')
     name = input('Ingrese el nombre del archivo a guardar:')
     path = f'Resultados\{name}.xlsx'
+    
     with pd.ExcelWriter(path) as writer1:
         doc1.to_excel(writer1, sheet_name = 'Solo en SubPlan', index = False)
         doc2.to_excel(writer1, sheet_name = 'Solo en COFEPRIS', index = False)
