@@ -63,13 +63,12 @@ def separeData(cof,sp):
     return cof1,sp1
 
 def PrepareData():
-    mx = mxTrimer(ld.loadMX())
     sp = spTrimer(ld.load_SPlan())
     File = input('Ingrese el nombre del documento COFEPRIS: ')
     cof = cofTrimer(ld.loadCOF(File))
     cof,sp = separeData(cof,sp)
     cof['REGISTRATION NUMBER'] = cof.apply(addParticle,axis = 1)
-    return mx,sp,cof
+    return sp,cof
 
 def searchdiff(cof,sp):
     '''
