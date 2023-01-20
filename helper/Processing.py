@@ -68,6 +68,7 @@ def PrepareData():
     cof = cofTrimer(ld.loadCOF(File))
     cof,sp = separeData(cof,sp)
     cof['REGISTRATION NUMBER'] = cof.apply(addParticle,axis = 1)
+    sp['REGISTRATION NUMBER'] = sp.apply(addParticle,axis = 1)
     return sp,cof
 
 def searchdiff(cof,sp):
