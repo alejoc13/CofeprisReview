@@ -62,8 +62,8 @@ def separeData(cof,sp):
     sp1 = sp[sp['Country'] == 'MX - Mexico']
     return cof1,sp1
 
-def PrepareData():
-    sp = spTrimer(ld.load_SPlan())
+def PrepareData(token):
+    sp = spTrimer(ld.load_SPlan(token))
     File = input('Ingrese el nombre del documento COFEPRIS: ')
     cof = cofTrimer(ld.loadCOF(File))
     cof,sp = separeData(cof,sp)
